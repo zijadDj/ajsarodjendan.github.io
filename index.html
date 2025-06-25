@@ -55,6 +55,21 @@
       50% { opacity: 1; transform: scale(1.2) translateY(-10px); }
       100% { opacity: 0; transform: scale(0.5) translateY(-30px); }
     }
+
+    @keyframes popUp {
+        0% {
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.4);
+            opacity: 1;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 0;
+        }
+    }
   </style>
 </head>
 <body>
@@ -124,6 +139,23 @@
           text.remove();
         }, 3000);
       }, 1500);
+
+      // Srca ❤️
+    setInterval(() => {
+    const heart = document.createElement('div');
+    heart.innerText = '❤️';
+    heart.style.position = 'absolute';
+    heart.style.fontSize = `${Math.random() * 20 + 20}px`;
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.top = Math.random() * 100 + 'vh';
+    heart.style.animation = 'popUp 2s ease-in-out';
+    heart.style.pointerEvents = 'none';
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    }, 2000);
+    }, 800);
 
       // Prikazi slike
       prikaziSlike();
