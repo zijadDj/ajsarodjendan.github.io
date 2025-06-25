@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Srećan Rođendan!</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    #startBtn {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: #ff4d4d;
+      color: white;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 10;
+    }
+
+    #startBtn:hover {
+      background-color: #e60000;
+    }
+
+    .image-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    .image-container img {
+      max-width: 60%;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 1s;
+    }
+
+    .show {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .happyText {
+      position: absolute;
+      font-size: 24px;
+      color: #ff3399;
+      animation: fadeAndMove 3s ease-in-out infinite;
+      font-weight: bold;
+    }
+
+    @keyframes fadeAndMove {
+      0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+      50% { opacity: 1; transform: scale(1.2) translateY(-10px); }
+      100% { opacity: 0; transform: scale(0.5) translateY(-30px); }
+    }
+  </style>
+</head>
+<body>
+  <button id="startBtn">KLIKNI AKO TI JE ROĐENDAN</button>
+
+  <div id="imageWrapper" class="image-container">
+    <img src="https://placekitten.com/400/300" />
+    <img src="https://placebear.com/400/300" />
+    <img src="https://picsum.photos/400/300" />
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const button = document.getElementById('startBtn');
+    const images = document.querySelectorAll('#imageWrapper img');
+    const wrapper = document.getElementById('imageWrapper');
+
+    button.addEventListener('click', () => {
+      button.style.display = 'none';
+      wrapper.style.display = 'flex';
+
+      // Start confetti
+      setInterval(() => {
+        confetti({
+          particleCount: 50,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }, 1000);
+
+      // Fade in images one by one
+      images.forEach((img, index) => {
+        setTimeout(() => {
+          img.classList.add('show');
+        }, index * 1000);
+      });
+
+      // Add random "SREĆAN ROĐENDAN" texts
+      setInterval(() => {
+        const text = document.createElement('div');
+        text.className = 'happyText';
+        text.innerText = 'SREĆAN ROĐENDAN';
+        text.style.left = Math.random() * 90 + '%';
+        text.style.top = Math.random() * 90 + '%';
+        document.body.appendChild(text);
+        setTimeout(() => {
+          text.remove();
+        }, 3000);
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
