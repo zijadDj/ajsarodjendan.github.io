@@ -7,9 +7,9 @@
   <style>
     body {
       margin: 0;
-      font-family: sans-serif;
       background: #fff;
       overflow: hidden;
+      font-family: sans-serif;
     }
 
     #startBtn {
@@ -25,7 +25,6 @@
       font-size: 20px;
       border: none;
       cursor: pointer;
-      transition: background 0.3s;
       z-index: 10;
     }
 
@@ -33,38 +32,14 @@
       background-color: #e60000;
     }
 
-    .image-container {
+    .birthday-img {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      opacity: 0;
-      animation: fadeIn 1s forwards;
-    }
-
-    .image-container img {
-      max-width: 60%;
-      margin: 10px;
+      max-width: 250px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.3);
       opacity: 0;
-      transform: scale(0.9);
-      transition: all 1s;
-    }
-
-    .show {
-      opacity: 1 !important;
-      transform: scale(1) !important;
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+      transition: opacity 1s ease-in-out;
+      z-index: 5;
     }
 
     .happyText {
@@ -85,23 +60,50 @@
 <body>
   <button id="startBtn">KLIKNI AKO TI JE ROĐENDAN</button>
 
-  <div id="imageWrapper" class="image-container">
-    <img src="https://placekitten.com/400/300" />
-    <img src="https://placebear.com/400/300" />
-    <img src="https://picsum.photos/400/300" />
-  </div>
-
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
     const button = document.getElementById('startBtn');
-    const images = document.querySelectorAll('#imageWrapper img');
-    const wrapper = document.getElementById('imageWrapper');
 
+    // Lista slika u folderu "slike"
+    const brojSlika = 5; // promeni ako imaš više ili manje slika
+    const slike = [];
+
+    for (let i = 1; i <= brojSlika; i++) {
+      slike.push(`slike/${i}.jpg`);
+    }
+
+    // Funkcija koja nasumično pozicionira slike i animira ih
+    function prikaziSlike() {
+      slike.forEach((src, index) => {
+        const img = document.createElement('img');
+        img.src = src;
+        img.className = 'birthday-img';
+        document.body.appendChild(img);
+
+        const animiraj = () => {
+          const x = Math.random() * (window.innerWidth - 250);
+          const y = Math.random() * (window.innerHeight - 250);
+
+          img.style.left = `${x}px`;
+          img.style.top = `${y}px`;
+
+          img.style.opacity = 1;
+
+          setTimeout(() => {
+            img.style.opacity = 0;
+          }, 3000);
+        };
+
+        // Pokreni animaciju više puta
+        setInterval(animiraj, 4000 + index * 200);
+      });
+    }
+
+    // Klik na dugme pokreće sve
     button.addEventListener('click', () => {
       button.style.display = 'none';
-      wrapper.style.display = 'flex';
 
-      // Start confetti
+      // Start konfeta
       setInterval(() => {
         confetti({
           particleCount: 50,
@@ -110,14 +112,7 @@
         });
       }, 1000);
 
-      // Fade in images one by one
-      images.forEach((img, index) => {
-        setTimeout(() => {
-          img.classList.add('show');
-        }, index * 1000);
-      });
-
-      // Add random "SREĆAN ROĐENDAN" texts
+      // Start teksta "SREĆAN ROĐENDAN"
       setInterval(() => {
         const text = document.createElement('div');
         text.className = 'happyText';
@@ -129,6 +124,9 @@
           text.remove();
         }, 3000);
       }, 1500);
+
+      // Prikazi slike
+      prikaziSlike();
     });
   </script>
 </body>
